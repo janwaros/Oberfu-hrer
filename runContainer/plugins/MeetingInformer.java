@@ -62,14 +62,7 @@ public class MeetingInformer implements ChatMessageListener, Startable {
     }
 
     private String prepareMessage() {
-        return "(Robot) Przygotowanie do spotkania podsumowania iteracji:\n" +
-                "\n" +
-                "1. Przeglad zadan z backloga, zmiany priorytetow.\n" +
-                "2. Przeglad zadan z iteracji + review, czy ktores nie powinny byc zamkniete.\n" +
-                "3. Zastanowienie sie nad sprawami na retrospektywe:\n" +
-                "   - co przeszkodziło w ukonczeniu zadan?\n" +
-                "   - jakie zadania moga zwiekszyc efektywnosc?\n" +
-                "   - inne sugestie";
+        return "(Robot) text""
     }
 
 
