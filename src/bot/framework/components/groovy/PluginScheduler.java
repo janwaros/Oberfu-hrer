@@ -1,6 +1,9 @@
 package bot.framework.components.groovy;
 
 import bot.framework.plugin.CronScheduled;
+import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.configuration.event.ConfigurationEvent;
+import org.apache.commons.configuration.event.ConfigurationListener;
 import org.apache.log4j.Logger;
 import org.picocontainer.annotations.Inject;
 import org.quartz.*;
@@ -17,7 +20,7 @@ import java.util.Map;
  * Date: 29.09.2013
  * Time: 21:58
  */
-public class PluginScheduler {
+public class PluginScheduler implements ConfigurationListener {
 
     Logger logger = Logger.getLogger(PluginScheduler.class);
 
@@ -26,6 +29,8 @@ public class PluginScheduler {
 
     @Inject
     Scheduler scheduler;
+    @Inject
+    PropertiesConfiguration configuration;
 
     Map<PluginContainer, List<JobKey>> jobs = new HashMap<PluginContainer, List<JobKey>>();
 
@@ -35,11 +40,19 @@ public class PluginScheduler {
 
             CronScheduled annotation = method.getAnnotation(CronScheduled.class);
             if(annotation!=null && method.getParameterTypes().length==0) {
-                JobKey thisJob = JobKey.jobKey(plugin.getPluginClass().getName()+"-"+method.getName());
+                JobKey thisJob = JobKey.jobKey(plugin.getPluginClass().getName()+"."+method.getName());
                 JobDetail methodExecution = JobBuilder.newJob(MethodExecutionJob.class).withIdentity(thisJob).build();
                 methodExecution.getJobDataMap().put(METHOD_KEY,method);
                 methodExecution.getJobDataMap().put(PLUGIN_KEY,plugin.getInstance());
-                Trigger trigger = TriggerBuilder.newTrigger().withSchedule(CronScheduleBuilder.cronSchedule(annotation.value())).build();
+
+                configuration.addConfigurationListener(this);
+                String schedule = configuration.getString(thisJob.getName());
+                if(schedule==null) {
+                    schedule = annotation.value();
+                    configuration.getLayout().setComment(thisJob.getName(),"Cron schedule auto imported from plugin");
+                    configuration.setProperty(thisJob.getName(), schedule);
+                }
+                Trigger trigger = TriggerBuilder.newTrigger().withIdentity(TriggerKey.triggerKey(thisJob.getName())).withSchedule(CronScheduleBuilder.cronSchedule(schedule)).build();
                 scheduler.scheduleJob(methodExecution,trigger);
                 newJobs.add(thisJob);
             }
@@ -49,7 +62,7 @@ public class PluginScheduler {
         }
     }
 
-    public void uregisterJobs(PluginContainer plugin) {
+    public void unregisterJobs(PluginContainer plugin) {
         List<JobKey> pluginJobs = jobs.get(plugin);
 
         try {
@@ -61,6 +74,28 @@ public class PluginScheduler {
             }
         } catch (SchedulerException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void configurationChanged(ConfigurationEvent configurationEvent) {
+        if(!configurationEvent.isBeforeUpdate()) {
+            for(List<JobKey> list : jobs.values()) {
+                for(JobKey key : list) {
+
+                    try {
+                        String new_conf = configuration.getString(key.getName());
+                        if(new_conf!=null && !new_conf.isEmpty()) {
+                            if(!((CronTrigger)scheduler.getTrigger(TriggerKey.triggerKey(key.getName()))).getCronExpression().equals(new_conf)) {
+                                scheduler.rescheduleJob(TriggerKey.triggerKey(key.getName()), TriggerBuilder.newTrigger().withIdentity(TriggerKey.triggerKey(key.getName())).withSchedule(CronScheduleBuilder.cronSchedule(new_conf)).build());
+                                logger.info("Configuration changed, rescheduling "+key.getName());
+                            }
+                        }
+                    } catch (SchedulerException e) {
+                        logger.warn("Rescheduling of "+key.getName()+" failed",e);
+                    }
+                }
+            }
         }
     }
 

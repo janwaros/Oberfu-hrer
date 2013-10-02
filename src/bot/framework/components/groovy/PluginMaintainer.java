@@ -4,6 +4,7 @@ import bot.framework.components.container.StartupListener;
 import bot.framework.components.skype.Skype;
 import bot.framework.plugin.BotPlugin;
 import groovy.lang.GroovyClassLoader;
+import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.log4j.Logger;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.annotations.Inject;
@@ -29,12 +30,18 @@ public class PluginMaintainer implements StartupListener, Job {
     @Inject Scheduler scheduler;
     @Inject PluginScheduler pluginScheduler;
     @Inject MutablePicoContainer container;
+    @Inject PropertiesConfiguration configuration;
+    @Inject PluginAutoListener autoListener;
 
     File pluginsDirectory = new File("plugins/");
     JobKey thisJob = JobKey.jobKey(getClass().getName());
 
-
     private Map<String, PluginContainer> loadedPlugins = new HashMap<String, PluginContainer>();
+
+    public Map<String, PluginContainer> getLoadedPlugins() {
+        return loadedPlugins;
+    }
+
 
 
     @Override
@@ -59,18 +66,35 @@ public class PluginMaintainer implements StartupListener, Job {
 
     private void unregisterPlugin(String pluginName) {
         PluginContainer plugin = loadedPlugins.get(pluginName);
-        pluginScheduler.uregisterJobs(plugin);
+        pluginScheduler.unregisterJobs(plugin);
+        autoListener.unregisterListener(plugin);
+
+        try {
+            if(Arrays.asList(plugin.getPluginClass().getInterfaces()).contains(StartupListener.class)) {
+                ((StartupListener)plugin.getInstance()).stop();
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Plugin unregistration failed: ",e);
+        }
+
+
         loadedPlugins.remove(pluginName);
         logger.info("Plugin unregistered: [id:"+plugin.getPluginClass().getName()+"]");
     }
 
     private void registerPlugin(String pluginName, PluginContainer pluginContainer) throws InstantiationException, SchedulerException {
+        autoListener.registerListener(pluginContainer);
         pluginScheduler.registerJobs(pluginContainer);
         loadedPlugins.put(pluginName, pluginContainer);
         logger.info("New plugin loaded: [id:"+pluginContainer.getPluginClass().getName()+",author:"+pluginContainer.getMeta().author()+",version:"+pluginContainer.getMeta().version()+"]");
+        if(Arrays.asList(pluginContainer.getPluginClass().getInterfaces()).contains(StartupListener.class)) {
+            ((StartupListener)pluginContainer.getInstance()).start();
+        }
     }
 
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
+
+            configuration.reload();
 
             List<File> fileList = Arrays.asList(pluginsDirectory.listFiles());
 

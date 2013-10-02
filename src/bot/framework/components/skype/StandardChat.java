@@ -1,5 +1,10 @@
 package bot.framework.components.skype;
 
+import com.skype.Chat;
+import com.skype.SkypeException;
+import org.apache.commons.configuration.PropertiesConfiguration;
+import sun.plugin.dom.exception.InvalidStateException;
+
 /**
  * Created by IntelliJ IDEA.
  * User: Jaroslaw Koscinski
@@ -8,16 +13,25 @@ package bot.framework.components.skype;
  */
 public enum StandardChat {
 
-    WORK_CHAT("Mediacja - Tutaj 90% powagi"),
-    SPAM_CHAT("Tutaj wklejamy SPAM, sprosne linki, rasistowskie..");
+    WORK_CHAT("skype.workChat"),
+    SPAM_CHAT("skype.spamChat");
 
-    private String identifier;
+    private String propertyKey;
+    private String value = null;
 
-    private StandardChat(String identifier ) {
-        this.identifier = identifier;
+    private StandardChat(String propertyKey ) {
+        this.propertyKey = propertyKey;
     }
 
-    public Boolean is(String chat) {
-        return identifier.equals(chat);
+    public static void loadFromConfiguration(PropertiesConfiguration configuration) {
+        WORK_CHAT.value = configuration.getString(WORK_CHAT.propertyKey);
+        SPAM_CHAT.value = configuration.getString(SPAM_CHAT.propertyKey);
+    }
+
+    public Boolean is(Chat chat) throws SkypeException {
+        if(value==null) {
+            throw new InvalidStateException("Values not loaded!");
+        }
+        return value.equals(chat.getWindowTitle());
     }
 }

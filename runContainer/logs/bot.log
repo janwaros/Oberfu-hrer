@@ -1,9 +1,9 @@
-2013-09-30 00:11:32,306 INFO   [StdSchedulerFactory] Using default implementation for ThreadExecutor 
-2013-09-30 00:11:32,309 INFO   [SimpleThreadPool] Job execution threads will use class loader of thread: main 
-2013-09-30 00:11:32,325 INFO   [SchedulerSignalerImpl] Initialized Scheduler Signaller of type: class org.quartz.core.SchedulerSignalerImpl 
-2013-09-30 00:11:32,326 INFO   [QuartzScheduler] Quartz Scheduler v.2.1.7 created. 
-2013-09-30 00:11:32,327 INFO   [RAMJobStore] RAMJobStore initialized. 
-2013-09-30 00:11:32,328 INFO   [QuartzScheduler] Scheduler meta-data: Quartz Scheduler (v2.1.7) 'DefaultQuartzScheduler' with instanceId 'NON_CLUSTERED'
+2013-10-02 02:27:54,717 INFO   [StdSchedulerFactory] Using default implementation for ThreadExecutor 
+2013-10-02 02:27:54,720 INFO   [SimpleThreadPool] Job execution threads will use class loader of thread: main 
+2013-10-02 02:27:54,733 INFO   [SchedulerSignalerImpl] Initialized Scheduler Signaller of type: class org.quartz.core.SchedulerSignalerImpl 
+2013-10-02 02:27:54,734 INFO   [QuartzScheduler] Quartz Scheduler v.2.1.7 created. 
+2013-10-02 02:27:54,735 INFO   [RAMJobStore] RAMJobStore initialized. 
+2013-10-02 02:27:54,735 INFO   [QuartzScheduler] Scheduler meta-data: Quartz Scheduler (v2.1.7) 'DefaultQuartzScheduler' with instanceId 'NON_CLUSTERED'
   Scheduler class: 'org.quartz.core.QuartzScheduler' - running locally.
   NOT STARTED.
   Currently in standby mode.
@@ -11,58 +11,32 @@
   Using thread pool 'org.quartz.simpl.SimpleThreadPool' - with 10 threads.
   Using job-store 'org.quartz.simpl.RAMJobStore' - which does not support persistence. and is not clustered.
  
-2013-09-30 00:11:32,328 INFO   [StdSchedulerFactory] Quartz scheduler 'DefaultQuartzScheduler' initialized from default resource file in Quartz package: 'quartz.properties' 
-2013-09-30 00:11:32,328 INFO   [StdSchedulerFactory] Quartz scheduler version: 2.1.7 
-2013-09-30 00:11:32,328 INFO   [QuartzScheduler] JobFactory set to: bot.framework.components.container.PicoContainerJobFactory@dc41c5 
-2013-09-30 00:11:32,425 INFO   [QuartzScheduler] Scheduler DefaultQuartzScheduler_$_NON_CLUSTERED started. 
-2013-09-30 00:11:32,425 INFO   [Oberfuhrer] Bot started 
-2013-09-30 00:11:33,014 INFO   [PluginMaintainer] New plugin loaded: [id:plugins.ReviewInformer,author:Jarosław Kościński,version:0.5] 
-2013-09-30 00:11:45,006 INFO   [ReviewInformer] fired 
-2013-09-30 00:12:00,002 INFO   [ReviewInformer] fired 
-2013-09-30 00:12:02,384 INFO   [PluginMaintainer] Plugin unregistered: [id:plugins.ReviewInformer] 
-2013-09-30 00:13:02,444 INFO   [PluginMaintainer] New plugin loaded: [id:plugins.ReviewInformer,author:Jarosław Kościński,version:0.5] 
-2013-09-30 00:13:15,002 INFO   [ReviewInformer] fired 
-2013-09-30 00:13:30,001 INFO   [ReviewInformer] fired 
-2013-09-30 00:13:45,001 INFO   [ReviewInformer] fired 
-2013-09-30 00:14:00,001 INFO   [ReviewInformer] fired 
-2013-09-30 00:14:15,001 INFO   [ReviewInformer] fired 
-2013-09-30 00:14:30,002 INFO   [ReviewInformer] fired 
-2013-09-30 00:14:45,002 INFO   [ReviewInformer] fired 
-2013-09-30 00:15:00,002 INFO   [ReviewInformer] fired 
-2013-09-30 00:15:15,001 INFO   [ReviewInformer] fired 
-2013-09-30 00:15:30,001 INFO   [ReviewInformer] fired 
-2013-09-30 00:15:32,384 INFO   [PluginMaintainer] Plugin unregistered: [id:plugins.ReviewInformer] 
-2013-09-30 00:15:32,437 INFO   [PluginMaintainer] New plugin loaded: [id:plugins.ReviewInformer,author:Jarosław Kościński,version:0.5] 
-2013-09-30 00:15:40,002 INFO   [ReviewInformer] fired2 
-2013-09-30 00:15:45,001 INFO   [ReviewInformer] fired 
-2013-09-30 00:15:50,001 INFO   [ReviewInformer] fired2 
-2013-09-30 00:16:00,001 INFO   [ReviewInformer] fired 
-2013-09-30 00:16:00,002 INFO   [ReviewInformer] fired2 
-2013-09-30 00:16:10,002 INFO   [ReviewInformer] fired2 
-2013-09-30 00:16:15,001 INFO   [ReviewInformer] fired 
-2013-09-30 00:16:20,001 INFO   [ReviewInformer] fired2 
-2013-09-30 00:16:30,001 INFO   [ReviewInformer] fired 
-2013-09-30 00:16:30,002 INFO   [ReviewInformer] fired2 
-2013-09-30 00:16:40,001 INFO   [ReviewInformer] fired2 
-2013-09-30 00:16:45,001 INFO   [ReviewInformer] fired 
-2013-09-30 00:16:50,002 INFO   [ReviewInformer] fired2 
-2013-09-30 00:17:00,001 INFO   [ReviewInformer] fired 
-2013-09-30 00:17:00,001 INFO   [ReviewInformer] fired2 
-2013-09-30 00:17:02,384 INFO   [PluginMaintainer] Plugin unregistered: [id:plugins.ReviewInformer] 
-2013-09-30 00:17:02,432 INFO   [PluginMaintainer] New plugin loaded: [id:plugins.ReviewInformer,author:Jarosław Kościński,version:0.5] 
-2013-09-30 00:17:10,002 INFO   [ReviewInformer] fired2 
-2013-09-30 00:17:15,001 INFO   [ReviewInformer] fired 
-2013-09-30 00:17:20,001 INFO   [ReviewInformer] fired2 
-2013-09-30 00:17:30,001 INFO   [ReviewInformer] fired 
-2013-09-30 00:17:30,001 INFO   [ReviewInformer] fired2 
-2013-09-30 00:17:40,001 INFO   [ReviewInformer] fired2 
-2013-09-30 00:17:45,002 INFO   [ReviewInformer] fired 
-2013-09-30 00:17:50,000 INFO   [ReviewInformer] fired2 
-2013-09-30 00:18:00,001 INFO   [ReviewInformer] fired 
-2013-09-30 00:18:00,001 INFO   [ReviewInformer] fired2 
-2013-09-30 00:18:10,001 INFO   [ReviewInformer] fired2 
-2013-09-30 00:18:15,001 INFO   [ReviewInformer] fired 
-2013-09-30 00:18:20,001 INFO   [ReviewInformer] fired2 
-2013-09-30 00:18:30,001 INFO   [ReviewInformer] fired 
-2013-09-30 00:18:30,002 INFO   [ReviewInformer] fired2 
-2013-09-30 00:18:40,001 INFO   [ReviewInformer] fired2 
+2013-10-02 02:27:54,735 INFO   [StdSchedulerFactory] Quartz scheduler 'DefaultQuartzScheduler' initialized from default resource file in Quartz package: 'quartz.properties' 
+2013-10-02 02:27:54,735 INFO   [StdSchedulerFactory] Quartz scheduler version: 2.1.7 
+2013-10-02 02:27:54,736 INFO   [QuartzScheduler] JobFactory set to: bot.framework.components.container.PicoContainerJobFactory@530cf2 
+2013-10-02 02:27:54,905 INFO   [QuartzScheduler] Scheduler DefaultQuartzScheduler_$_NON_CLUSTERED started. 
+2013-10-02 02:27:54,905 INFO   [Oberfuhrer] Bot started 
+2013-10-02 02:27:55,238 INFO   [PluginAutoListener] Registered skype listener for plugins.ReviewInformer 
+2013-10-02 02:27:55,382 INFO   [PluginMaintainer] New plugin loaded: [id:plugins.ReviewInformer,author:Jarosław Kościński,version:0.5] 
+2013-10-02 02:27:55,400 INFO   [PluginAutoListener] Registered skype listener for SamplePlugin 
+2013-10-02 02:27:55,403 INFO   [PluginMaintainer] New plugin loaded: [id:SamplePlugin,author:Jarek,version:1.0] 
+2013-10-02 02:28:00,008 INFO   [JobRunShell] Job DEFAULT.SamplePlugin.sendPing threw a JobExecutionException:  
+org.quartz.JobExecutionException: java.lang.reflect.InvocationTargetException [See nested exception: java.lang.reflect.InvocationTargetException]
+	at bot.framework.components.groovy.PluginScheduler$MethodExecutionJob.execute(PluginScheduler.java:113)
+	at org.quartz.core.JobRunShell.run(JobRunShell.java:213)
+	at org.quartz.simpl.SimpleThreadPool$WorkerThread.run(SimpleThreadPool.java:557)
+Caused by: java.lang.reflect.InvocationTargetException
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at java.lang.reflect.Method.invoke(Method.java:597)
+	at bot.framework.components.groovy.PluginScheduler$MethodExecutionJob.execute(PluginScheduler.java:111)
+	... 2 more
+Caused by: java.lang.NullPointerException
+	at bot.framework.components.skype.Skype.sendToBookmarkedChat(Skype.java:29)
+	at bot.framework.components.skype.Skype$sendToBookmarkedChat.call(Unknown Source)
+	at org.codehaus.groovy.runtime.callsite.CallSiteArray.defaultCall(CallSiteArray.java:45)
+	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.call(AbstractCallSite.java:108)
+	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.call(AbstractCallSite.java:120)
+	at SamplePlugin.sendPing(SamplePlugin.groovy:31)
+	... 7 more

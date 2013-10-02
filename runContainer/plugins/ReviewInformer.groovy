@@ -1,14 +1,14 @@
 package plugins
 
-import bot.framework.components.jira.Jira;
+import bot.framework.components.jira.Jira
+import bot.framework.components.skype.MessageReceivedListener
+import bot.framework.components.skype.Skype;
 import bot.framework.plugin.BotPlugin
 import bot.framework.plugin.CronScheduled
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.skype.*;
-
-import bot.framework.components.skype.*;
-import bot.framework.components.skype.Skype
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.skype.ChatMessage
+import com.skype.SkypeException;
 import org.apache.log4j.Logger;
 import sun.misc.BASE64Encoder;
 
@@ -20,7 +20,7 @@ import sun.misc.BASE64Encoder;
  */
 
 @BotPlugin(author = "Jarosław Kościński", version = "0.5")
-public class ReviewInformer implements ChatMessageListener {
+public class ReviewInformer implements MessageReceivedListener {
 
     Logger logger = Logger.getLogger(ReviewInformer.class)
 
@@ -30,14 +30,15 @@ public class ReviewInformer implements ChatMessageListener {
     private String jira_user;
     private String jira_pass;
 
-    public ReviewInformer(Jira jira) throws SkypeException {
+    private Skype skype;
 
+    public ReviewInformer(Jira jira, Skype skype) throws SkypeException {
+        this.skype = skype;
     }
 
-    @CronScheduled("0/15 * * ? * * *")
+    @CronScheduled("* * */3 ? * * *")
     public void sendReviewInfo() {
-        //Skype.getInstance().sendToStandardChat(StandardChat.WORK_CHAT, prepareRssMessage());
-        logger.info("fired");
+        skype.sendToBookmarkedChat(StandardChat.WORK_CHAT, prepareRssMessage());
     }
 
     @Override
@@ -45,13 +46,6 @@ public class ReviewInformer implements ChatMessageListener {
         if(chatMessage.getContent().equals(UPDATE_COMMAND)) {
             chatMessage.getChat().send(prepareRssMessage());
         }
-    }
-
-    @Override
-    void chatMessageSent(ChatMessage chatMessage) {}
-
-    public void start() throws SkypeException {
-        this.sendReviewInfo();
     }
 
     private String prepareRssMessage() {
