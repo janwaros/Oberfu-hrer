@@ -3,7 +3,6 @@ package bot.framework.components.skype;
 import com.skype.Chat;
 import com.skype.SkypeException;
 import org.apache.commons.configuration.PropertiesConfiguration;
-import sun.plugin.dom.exception.InvalidStateException;
 
 /**
  * Created by IntelliJ IDEA.
@@ -30,7 +29,7 @@ public enum StandardChat {
 
     public Boolean is(Chat chat) throws SkypeException {
         if(value==null) {
-            throw new InvalidStateException("Values not loaded!");
+            throw new RuntimeException("Values not loaded!");
         }
         return value.equals(chat.getWindowTitle());
     }

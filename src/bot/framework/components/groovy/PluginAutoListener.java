@@ -6,12 +6,8 @@ import com.skype.ChatMessage;
 import com.skype.ChatMessageListener;
 import com.skype.SkypeException;
 import org.apache.log4j.Logger;
-import org.quartz.JobKey;
-import org.quartz.SchedulerException;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -24,6 +20,7 @@ public class PluginAutoListener implements StartupListener, ChatMessageListener 
     Logger logger = Logger.getLogger(PluginAutoListener.class);
 
     List<PluginContainer> skypeListeners = new LinkedList<PluginContainer>();
+    List<String> chatMessageList = new LinkedList<String>();
 
     public void registerListener(PluginContainer plugin) {
 
@@ -59,13 +56,25 @@ public class PluginAutoListener implements StartupListener, ChatMessageListener 
 
     @Override
     public void chatMessageReceived(ChatMessage chatMessage) throws SkypeException {
-        if(chatMessage.getStatus()== ChatMessage.Status.RECEIVED) {
-            for(PluginContainer plugin : skypeListeners) {
-                try {
-                    ((MessageReceivedListener)plugin.getInstance()).chatMessageReceived(chatMessage);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
+        logger.info("Message received with id:"+chatMessage.getId()+", in chat:"+chatMessage.getChat().getId()+", with status:"+chatMessage.getStatus().toString()+", with content:\""+chatMessage.getContent()+"\"");
+
+        String uniqueId = chatMessage.getChat().getId()+chatMessage.getId();
+
+        if(chatMessage.getStatus()==ChatMessage.Status.READ && chatMessageList.contains(uniqueId)) {
+            chatMessageList.remove(uniqueId);
+            logger.info("Listeners will not be notified, already were.");
+            return;
+        } else if(chatMessage.getStatus()==ChatMessage.Status.RECEIVED){
+            chatMessageList.add(uniqueId);
+        }
+
+        logger.info("Listeners will be notified");
+
+        for(PluginContainer plugin : skypeListeners) {
+            try {
+                ((MessageReceivedListener)plugin.getInstance()).chatMessageReceived(chatMessage);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
         }
     }

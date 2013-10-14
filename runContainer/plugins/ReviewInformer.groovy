@@ -2,15 +2,20 @@ package plugins
 
 import bot.framework.components.jira.Jira
 import bot.framework.components.skype.MessageReceivedListener
-import bot.framework.components.skype.Skype;
+import bot.framework.components.skype.Skype
+import bot.framework.components.skype.StandardChat;
 import bot.framework.plugin.BotPlugin
 import bot.framework.plugin.CronScheduled
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper
+import com.atlassian.jira.rest.client.api.IssueRestClient
+import com.atlassian.jira.rest.client.api.JiraRestClient
+import com.atlassian.jira.rest.client.api.domain.BasicIssue
+import com.atlassian.jira.rest.client.api.domain.Issue
+import com.atlassian.jira.rest.client.api.domain.SearchResult
+import com.atlassian.util.concurrent.Promise
+import com.google.common.collect.Lists
 import com.skype.ChatMessage
 import com.skype.SkypeException;
 import org.apache.log4j.Logger;
-import sun.misc.BASE64Encoder;
 
 /**
  * Created by IntelliJ IDEA.
@@ -24,59 +29,55 @@ public class ReviewInformer implements MessageReceivedListener {
 
     Logger logger = Logger.getLogger(ReviewInformer.class)
 
-    private final static String JSON_FEED_URL = "http://tapir/bot.framework.components.jira/rest/api/latest/search?jql=filter=%22Mediation%20-%20All%22%20AND%20status%20=%20%22Resolved%22%20and%20%28labels%20is%20empty%20or%20labels%20not%20in%20%28Waiting%29%29%20ORDER%20BY%20due%20ASC,%20priority%20DESC,%20fixVersion%20ASC";
+    private final static String REVIEW_JIRA_MATCHER = "\"Mediation - All\" AND status = \"Resolved\" and (labels is empty or labels not in 'Waiting') ORDER BY due ASC, priority DESC, fixVersion ASC";
     private final static String UPDATE_COMMAND = "!review";
-    private final static String JIRA_ISSUE_PREFIX = "http://tapir/bot.framework.components.jira/browse/";
-    private String jira_user;
-    private String jira_pass;
-
+    private final static String JIRA_URL_ISSUE_PREFIX = "http://tapir/jira/browse/";
     private Skype skype;
+    private JiraRestClient restClient;
 
     public ReviewInformer(Jira jira, Skype skype) throws SkypeException {
         this.skype = skype;
+        this.restClient = jira.getJiraRestClient();
     }
 
     @CronScheduled("* * */3 ? * * *")
     public void sendReviewInfo() {
-        skype.sendToBookmarkedChat(StandardChat.WORK_CHAT, prepareRssMessage());
+        skype.sendToBookmarkedChat(StandardChat.WORK_CHAT, prepareMessage());
     }
 
     @Override
     void chatMessageReceived(ChatMessage chatMessage) {
-        if(chatMessage.getContent().equals(UPDATE_COMMAND)) {
-            chatMessage.getChat().send(prepareRssMessage());
+        if(chatMessage.getContent().contains(UPDATE_COMMAND)) {
+            chatMessage.getChat().send(prepareMessage());
         }
     }
 
-    private String prepareRssMessage() {
+    private String prepareMessage() {
         StringBuilder message = new StringBuilder("(Robot) Uwaga! Tasków do review: ");
 
         try {
-            URL url = new URL (JSON_FEED_URL);
-            String credentials = jira_user + ":" + jira_pass;
-            String encoded = new BASE64Encoder().encode(credentials.getBytes());
+            final SearchResult searchResult = restClient.getSearchClient().searchJql(REVIEW_JIRA_MATCHER).claim();
+            final IssueRestClient issueClient = restClient.getIssueClient();
+            List<String> issues = new LinkedList<String>();
 
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-            connection.setDoOutput(true);
-            connection.setRequestProperty  ("Authorization", "Basic " + encoded);
-            InputStream content = connection.getInputStream();
-
-
-            ObjectMapper mapper = new ObjectMapper();
-            JsonNode rootNode = mapper.readValue(content, JsonNode.class);
-            JsonNode issuesList = rootNode.get("issues");
-
-            if(issuesList.size()<2) return null;
-
-            message.append(issuesList.size()).append("\n");
-
-            for(JsonNode issue : issuesList) {
-                JsonNode assigned = issue.get("fields").get("assignee");
-                message.append(issue.get("fields").get("summary").asText() + ", przypisany: "+(assigned.isNull()?"NIKT":assigned.get("name").asText())+" ( " + JIRA_ISSUE_PREFIX + issue.get("key").asText() + " )\n");
+            for (BasicIssue basicIssue : searchResult.getIssues()) {
+                StringBuilder issueText = new StringBuilder();
+                Issue issue = issueClient.getIssue(basicIssue.getKey()).claim();
+                issueText.append(issue.getSummary());
+                issueText.append(", przypisany: "+(issue.getAssignee()==null?"NIKT":issue.getAssignee().toString()));
+                issueText.append(" (" + JIRA_URL_ISSUE_PREFIX + issue.get("key").asText() + " )");
+                issues.add(issueText.toString());
             }
 
-            content.close();
+            //if 2 or less, not a big deal
+            if(issues.size()<=2) return "";
+
+            message.append(issues.size()).append("\n");
+
+            for(String issue : issues) {
+                message.append(issue).append("\n");
+            }
+
             return message.toString();
 
         } catch (Throwable e) {
