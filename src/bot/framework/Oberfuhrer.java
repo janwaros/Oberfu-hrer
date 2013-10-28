@@ -30,6 +30,8 @@ public class Oberfuhrer {
 
     public static void main(String[] args) throws SchedulerException, ConfigurationException {
 
+        logger.info("Oberführer v.0.1 by Jarosław Kościński");
+
         final MutablePicoContainer container = new DefaultPicoContainer(new Caching(), new StartupListenerStrategy(), null);
         final Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
         scheduler.setJobFactory(new PicoContainerJobFactory(container));
@@ -50,6 +52,7 @@ public class Oberfuhrer {
         Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {
                 try {
+                    logger.info("Bot is going down");
                     scheduler.shutdown();
                 } catch (SchedulerException e) {
                     // we are shutting down, nothing terrible happened

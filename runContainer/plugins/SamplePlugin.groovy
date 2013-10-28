@@ -23,7 +23,9 @@ class SamplePlugin implements MessageReceivedListener {
     }
 
     void chatMessageReceived(ChatMessage receivedChatMessage) throws SkypeException {
-        receivedChatMessage.getChat().send("Dzieki za wiadomosc");
+        if(receivedChatMessage.getStatus()==ChatMessage.Status.RECEIVED) {
+            receivedChatMessage.getChat().send("Dzieki za wiadomosc");
+        }
     }
 
     @CronScheduled("0 * * ? * * *")

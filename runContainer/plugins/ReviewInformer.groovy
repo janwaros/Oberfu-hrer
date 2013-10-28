@@ -11,8 +11,6 @@ import com.atlassian.jira.rest.client.api.JiraRestClient
 import com.atlassian.jira.rest.client.api.domain.BasicIssue
 import com.atlassian.jira.rest.client.api.domain.Issue
 import com.atlassian.jira.rest.client.api.domain.SearchResult
-import com.atlassian.util.concurrent.Promise
-import com.google.common.collect.Lists
 import com.skype.ChatMessage
 import com.skype.SkypeException;
 import org.apache.log4j.Logger;
@@ -47,7 +45,7 @@ public class ReviewInformer implements MessageReceivedListener {
 
     @Override
     void chatMessageReceived(ChatMessage chatMessage) {
-        if(chatMessage.getContent().contains(UPDATE_COMMAND)) {
+        if(chatMessage.getContent().contains(UPDATE_COMMAND) && chatMessage.getStatus()==ChatMessage.Status.RECEIVED) {
             chatMessage.getChat().send(prepareMessage());
         }
     }

@@ -20,7 +20,7 @@ public class PluginAutoListener implements StartupListener, ChatMessageListener 
     Logger logger = Logger.getLogger(PluginAutoListener.class);
 
     List<PluginContainer> skypeListeners = new LinkedList<PluginContainer>();
-    List<String> chatMessageList = new LinkedList<String>();
+    //List<String> chatMessageList = new LinkedList<String>();
 
     public void registerListener(PluginContainer plugin) {
 
@@ -57,7 +57,7 @@ public class PluginAutoListener implements StartupListener, ChatMessageListener 
     @Override
     public void chatMessageReceived(ChatMessage chatMessage) throws SkypeException {
         logger.info("Message received with id:"+chatMessage.getId()+", in chat:"+chatMessage.getChat().getId()+", with status:"+chatMessage.getStatus().toString()+", with content:\""+chatMessage.getContent()+"\"");
-
+        /*
         String uniqueId = chatMessage.getChat().getId()+chatMessage.getId();
 
         if(chatMessage.getStatus()==ChatMessage.Status.READ && chatMessageList.contains(uniqueId)) {
@@ -66,7 +66,7 @@ public class PluginAutoListener implements StartupListener, ChatMessageListener 
             return;
         } else if(chatMessage.getStatus()==ChatMessage.Status.RECEIVED){
             chatMessageList.add(uniqueId);
-        }
+        }    */
 
         logger.info("Listeners will be notified");
 
@@ -74,7 +74,7 @@ public class PluginAutoListener implements StartupListener, ChatMessageListener 
             try {
                 ((MessageReceivedListener)plugin.getInstance()).chatMessageReceived(chatMessage);
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                logger.error("Error in listener: "+plugin.getPluginClass().getName(),e);
             }
         }
     }
