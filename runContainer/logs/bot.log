@@ -1,9 +1,10 @@
-2013-10-13 18:31:55,134 INFO  {t} [StdSchedulerFactory] Using default implementation for ThreadExecutor 
-2013-10-13 18:31:55,136 INFO  {t} [SimpleThreadPool] Job execution threads will use class loader of thread: main 
-2013-10-13 18:31:55,149 INFO  {t} [SchedulerSignalerImpl] Initialized Scheduler Signaller of type: class org.quartz.core.SchedulerSignalerImpl 
-2013-10-13 18:31:55,150 INFO  {t} [QuartzScheduler] Quartz Scheduler v.2.1.7 created. 
-2013-10-13 18:31:55,151 INFO  {t} [RAMJobStore] RAMJobStore initialized. 
-2013-10-13 18:31:55,151 INFO  {t} [QuartzScheduler] Scheduler meta-data: Quartz Scheduler (v2.1.7) 'DefaultQuartzScheduler' with instanceId 'NON_CLUSTERED'
+2013-10-30 01:28:49,592 INFO  {main} [Oberfuhrer] Oberführer v.0.1 by Jarosław Kościński 
+2013-10-30 01:28:49,639 INFO  {main} [StdSchedulerFactory] Using default implementation for ThreadExecutor 
+2013-10-30 01:28:49,641 INFO  {main} [SimpleThreadPool] Job execution threads will use class loader of thread: main 
+2013-10-30 01:28:49,659 INFO  {main} [SchedulerSignalerImpl] Initialized Scheduler Signaller of type: class org.quartz.core.SchedulerSignalerImpl 
+2013-10-30 01:28:49,660 INFO  {main} [QuartzScheduler] Quartz Scheduler v.2.1.7 created. 
+2013-10-30 01:28:49,661 INFO  {main} [RAMJobStore] RAMJobStore initialized. 
+2013-10-30 01:28:49,662 INFO  {main} [QuartzScheduler] Scheduler meta-data: Quartz Scheduler (v2.1.7) 'DefaultQuartzScheduler' with instanceId 'NON_CLUSTERED'
   Scheduler class: 'org.quartz.core.QuartzScheduler' - running locally.
   NOT STARTED.
   Currently in standby mode.
@@ -11,49 +12,9 @@
   Using thread pool 'org.quartz.simpl.SimpleThreadPool' - with 10 threads.
   Using job-store 'org.quartz.simpl.RAMJobStore' - which does not support persistence. and is not clustered.
  
-2013-10-13 18:31:55,151 INFO  {t} [StdSchedulerFactory] Quartz scheduler 'DefaultQuartzScheduler' initialized from default resource file in Quartz package: 'quartz.properties' 
-2013-10-13 18:31:55,152 INFO  {t} [StdSchedulerFactory] Quartz scheduler version: 2.1.7 
-2013-10-13 18:31:55,152 INFO  {t} [QuartzScheduler] JobFactory set to: bot.framework.components.container.PicoContainerJobFactory@1175422 
-2013-10-13 18:31:55,314 INFO  {t} [QuartzScheduler] Scheduler DefaultQuartzScheduler_$_NON_CLUSTERED started. 
-2013-10-13 18:31:55,314 INFO  {t} [Oberfuhrer] Bot started 
-2013-10-13 18:31:55,659 INFO  {t} [PluginAutoListener] Registered skype listener for plugins.ReviewInformer 
-2013-10-13 18:31:55,806 INFO  {t} [PluginMaintainer] New plugin loaded: [id:plugins.ReviewInformer,author:Jarosław Kościński,version:0.5] 
-2013-10-13 18:31:55,822 INFO  {t} [PluginAutoListener] Registered skype listener for SamplePlugin 
-2013-10-13 18:31:55,825 INFO  {t} [PluginMaintainer] New plugin loaded: [id:SamplePlugin,author:Jarek,version:1.0] 
-2013-10-13 18:32:00,008 INFO  {t} [JobRunShell] Job DEFAULT.SamplePlugin.sendPing threw a JobExecutionException:  
-org.quartz.JobExecutionException: java.lang.reflect.InvocationTargetException [See nested exception: java.lang.reflect.InvocationTargetException]
-	at bot.framework.components.groovy.PluginScheduler$MethodExecutionJob.execute(PluginScheduler.java:113)
-	at org.quartz.core.JobRunShell.run(JobRunShell.java:213)
-	at org.quartz.simpl.SimpleThreadPool$WorkerThread.run(SimpleThreadPool.java:557)
-Caused by: java.lang.reflect.InvocationTargetException
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
-	at java.lang.reflect.Method.invoke(Method.java:597)
-	at bot.framework.components.groovy.PluginScheduler$MethodExecutionJob.execute(PluginScheduler.java:111)
-	... 2 more
-Caused by: java.lang.NullPointerException
-	at bot.framework.components.skype.Skype.sendToBookmarkedChat(Skype.java:29)
-	at bot.framework.components.skype.Skype$sendToBookmarkedChat.call(Unknown Source)
-	at org.codehaus.groovy.runtime.callsite.CallSiteArray.defaultCall(CallSiteArray.java:45)
-	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.call(AbstractCallSite.java:108)
-	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.call(AbstractCallSite.java:120)
-	at SamplePlugin.sendPing(SamplePlugin.groovy:31)
-	... 7 more
-2013-10-13 18:33:00,001 INFO  {t} [JobRunShell] Job DEFAULT.SamplePlugin.sendPing threw a JobExecutionException:  
-org.quartz.JobExecutionException: java.lang.reflect.InvocationTargetException [See nested exception: java.lang.reflect.InvocationTargetException]
-	at bot.framework.components.groovy.PluginScheduler$MethodExecutionJob.execute(PluginScheduler.java:113)
-	at org.quartz.core.JobRunShell.run(JobRunShell.java:213)
-	at org.quartz.simpl.SimpleThreadPool$WorkerThread.run(SimpleThreadPool.java:557)
-Caused by: java.lang.reflect.InvocationTargetException
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
-	at java.lang.reflect.Method.invoke(Method.java:597)
-	at bot.framework.components.groovy.PluginScheduler$MethodExecutionJob.execute(PluginScheduler.java:111)
-	... 2 more
-Caused by: java.lang.NullPointerException
-	at bot.framework.components.skype.Skype.sendToBookmarkedChat(Skype.java:29)
-	at bot.framework.components.skype.Skype$sendToBookmarkedChat.call(Unknown Source)
-	at SamplePlugin.sendPing(SamplePlugin.groovy:31)
-	... 7 more
+2013-10-30 01:28:49,662 INFO  {main} [StdSchedulerFactory] Quartz scheduler 'DefaultQuartzScheduler' initialized from default resource file in Quartz package: 'quartz.properties' 
+2013-10-30 01:28:49,662 INFO  {main} [StdSchedulerFactory] Quartz scheduler version: 2.1.7 
+2013-10-30 01:28:49,662 INFO  {main} [QuartzScheduler] JobFactory set to: bot.framework.components.container.PicoContainerJobFactory@1d2b9b7 
+2013-10-30 01:29:17,152 INFO  {main} [QuartzScheduler] Scheduler DefaultQuartzScheduler_$_NON_CLUSTERED started. 
+2013-10-30 01:29:17,152 INFO  {main} [Oberfuhrer] Bot started 
+2013-10-30 01:29:17,583 INFO  {DefaultQuartzScheduler_Worker-1} [PluginAutoListener] Registered skype listener for plugins.ReviewInformer 

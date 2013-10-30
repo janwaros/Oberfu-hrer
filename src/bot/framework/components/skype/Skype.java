@@ -3,6 +3,7 @@ package bot.framework.components.skype;
 import bot.framework.components.container.StartupListener;
 import com.skype.*;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.log4j.Logger;
 
 /**
  * Created by IntelliJ IDEA.
@@ -11,6 +12,8 @@ import org.apache.commons.configuration.PropertiesConfiguration;
  * Time: 17:34
  */
 public class Skype implements StartupListener {
+
+    Logger logger = Logger.getLogger(Skype.class);
 
     Chat workChatHandle = null;
     Chat spamChatHandle = null;
@@ -45,10 +48,13 @@ public class Skype implements StartupListener {
     public void start() {
         try {
             for(Chat chat : com.skype.Skype.getAllBookmarkedChats()) {
+                logger.info("Bookmarked chat: "+chat.getWindowTitle());
                 if(StandardChat.SPAM_CHAT.is(chat)) {
+                    logger.info("Bookmarked chat: "+chat.getWindowTitle()+" is now a SPAM chat");
                     spamChatHandle = chat;
                 }
                 if(StandardChat.WORK_CHAT.is(chat)) {
+                    logger.info("Bookmarked chat: "+chat.getWindowTitle()+" is now a WORK chat");
                     workChatHandle = chat;
                 }
             }
